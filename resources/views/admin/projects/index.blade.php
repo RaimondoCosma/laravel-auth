@@ -19,7 +19,7 @@
                     <td>{{ $project->title }}</td>
                     <td>{{ $project->description }}</td>
                     <td>{{ $project->slug }}</td>
-                    <td><a class="btn btn-primary" href="{{ route('admin.projects.show', $project->id) }}">Dettagli</a></td>
+                    <td><a class="btn btn-primary" href="{{ route('admin.projects.show', $project->slug) }}">Dettagli</a></td>
                 </tr>
             @endforeach
         </tbody>
