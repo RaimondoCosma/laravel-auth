@@ -17,6 +17,9 @@ class ProjectSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
+        // Con questo comando ogni volta che lancio il seeder mi cancella i project precedenti
+        Project::truncate();
+
         for ($i = 0; $i < 10; $i++) {
             $new_project = new Project();
             $new_project->title = $faker->sentence();

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -27,7 +28,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.projects.create');
     }
 
     /**
@@ -38,7 +39,14 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+        $data = $request->validated();
+    
+        $new_project = new Project();
+        $new_project->fill($data);
+        $new_project->slug = Str::slug($new_project->title);
+        $new_project->save();
+
+        return redirect()->route('admin.projects.index')->with('message', "Il post '$new_project->title' è stato creato con successo");
     }
 
     /**
@@ -47,9 +55,10 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function show($slug)
+    // public function show($param)
+    public function show(Project $project)
     {
-        $project = Project::where('slug', $slug)->first();
+        // $project = Project::where('slug', $param)->first();
         return view('admin.projects.show', compact('project'));
     }
 
