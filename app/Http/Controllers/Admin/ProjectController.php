@@ -46,7 +46,7 @@ class ProjectController extends Controller
         $new_project->slug = Str::slug($new_project->title);
         $new_project->save();
 
-        return redirect()->route('admin.projects.index')->with('message', "Il post '$new_project->title' è stato creato con successo");
+        return redirect()->route('admin.projects.index')->with('message', "Il progetto '$new_project->title' è stato creato con successo!");
     }
 
     /**
@@ -70,7 +70,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        return view('admin.projects.edit', compact('project'));
     }
 
     /**
@@ -82,7 +82,14 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        $old_title = $project->title;
+        $data = $request->validated();
+
+        $project->slug = Str::slug($data['title']);
+        $project->update($data);
+
+        return redirect()->route('admin.projects.index')->with('message', "Il progetto '$old_title' è stato aggiornato!");
+
     }
 
     /**
@@ -93,6 +100,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $old_title = $project->title;
+
+        $project->delete();
+
+        return redirect()->route('admin.projects.index')->with('message', "Il progetto '$old_title' è stato cancellato!");
     }
 }
