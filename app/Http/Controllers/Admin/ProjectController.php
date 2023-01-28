@@ -43,14 +43,15 @@ class ProjectController extends Controller
     {
         $data = $request->validated();
 
+        if (isset($data['thumb'])){
+            $img_path = Storage::disk('public')->put('uploads', $data['thumb']);
+            $data['thumb'] = $img_path;
+        }
+
         $new_project = new Project();
         $new_project->fill($data);
         $new_project->slug = Str::slug($new_project->title);
 
-        if (isset($data['thumb'])){
-            $img_path = Storage::disk('public')->put('uploads', $data['thumb']);
-            $new_project->thumb = $img_path;
-        }
 
         $new_project->save();
 
@@ -94,6 +95,12 @@ class ProjectController extends Controller
         $data = $request->validated();
 
         $project->slug = Str::slug($data['title']);
+
+        if (isset($data['thumb'])){
+            $img_path = Storage::disk('public')->put('uploads', $data['thumb']);
+            $data['thumb'] = $img_path;
+        }
+
         $project->update($data);
 
         return redirect()->route('admin.projects.index')->with('message', "Il progetto '$old_title' è stato aggiornato!");

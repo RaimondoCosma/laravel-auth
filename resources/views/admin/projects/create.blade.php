@@ -23,8 +23,18 @@
             </div>
             <div class="mb-3">
                 <label for="thumb" class="form-label">Scegli immagine</label>
+                <img id="output" width="100" class="d-block my-3" />
                 <input type="file" class="form-control @error('thumb') is-invalid @enderror" id="thumb"
-                    name="thumb" value="{{ old('thumb') }}" placeholder="Inserisci il Titolo">
+                    name="thumb" value="{{ old('thumb') }}" placeholder="Inserisci il Titolo" onchange="loadFile(event)">
+                <script>
+                    const loadFile = function(event) {
+                        const output = document.getElementById('output');
+                        output.src = URL.createObjectURL(event.target.files[0]);
+                        output.onload = function() {
+                            URL.revokeObjectURL(output.src) // free memory
+                        }
+                    };
+                </script>
                 @error('thumb')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
