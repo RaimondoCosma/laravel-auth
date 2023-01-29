@@ -24,11 +24,31 @@
             </div>
             <div class="mb-3">
                 <label for="thumb" class="form-label">Scegli immagine</label>
+                @if ($project->thumb)
+                    {{-- Checkbox per abilitare o disabilitare le immagini --}}
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="no_thumb" name="no_thumb">
+                        <label class="form-check-label" for="no_thumb" id="text-no_thumb">Disabilita Immagine</label>
+                    </div>
+                    {{-- /Checkbox per abilitare o disabilitare le immagini --}}
+                @endif
                 <img id="output" width="100" class="d-block my-3"
                     @if ($project->thumb) src="{{ asset("storage/$project->thumb") }}" @endif />
                 <input type="file" class="form-control @error('thumb') is-invalid @enderror" id="thumb"
                     name="thumb" value="{{ old('thumb') }}" placeholder="Inserisci il Titolo" onchange="loadFile(event)">
                 <script>
+                    const noThumb = document.getElementById('no_thumb');
+                    const inputThumb = document.getElementById('thumb');
+                    // let textNoThumb = document.getElementById('text-no_thumb').innerHTML;
+                    noThumb.addEventListener('change', function() {
+                        if (noThumb.checked) {
+                            inputThumb.disabled = true;
+                            // textNoThumb = 'Abilita Immagine!';
+                        } else {
+                            inputThumb.disabled = false;
+                            // textNoThumb = 'Disabilita Immagine!';
+                        }
+                    });
                     const loadFile = function(event) {
                         const output = document.getElementById('output');
                         output.src = URL.createObjectURL(event.target.files[0]);

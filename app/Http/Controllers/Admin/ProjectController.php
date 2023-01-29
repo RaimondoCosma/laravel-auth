@@ -97,8 +97,15 @@ class ProjectController extends Controller
         $project->slug = Str::slug($data['title']);
 
         if (isset($data['thumb'])){
+            if($project->thumb){
+                Storage::disk('public')->delete($project->thumb);
+            }
             $img_path = Storage::disk('public')->put('uploads', $data['thumb']);
             $data['thumb'] = $img_path;
+        }
+        if(isset($data['no_thumb']) && $project->thumb){
+            Storage::disk('public')->delete($project->thumb);
+            $project->thumb = null;
         }
 
         $project->update($data);
@@ -116,6 +123,10 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         $old_title = $project->title;
+
+        if($project->thumb){
+            Storage::disk('public')->delete($project->thumb);
+        }
 
         $project->delete();
 
